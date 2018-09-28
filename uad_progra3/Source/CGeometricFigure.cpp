@@ -24,7 +24,7 @@ CGeometricFigure::CGeometricFigure() :
 	m_objectRotation = 0;
 	m_objectPosition = CVector3::ZeroVector();
 	m_rotationSpeed = DEFAULT_ROTATION_SPEED;
-	
+	  
 	//
 	// ======================================
 }
@@ -503,6 +503,7 @@ void CGeometricFigure::createSphereTrail(int x, int y)
 	float Xdegrees = 180.0f / x;
 	float Ydegrees = 360.0f / y;
 
+	float newHeight = 3.5;
 	//Numero de caras y vertices en el mesh
 	int numVertices = (SubdivisionHeight * (SubdivisionAxis)) + 2;
 	m_numFacesSphereTrail = (numVertices - 2) * 2;
@@ -514,14 +515,14 @@ void CGeometricFigure::createSphereTrail(int x, int y)
 
 	int indexLoop = 1;
 	int verticeActual = 0;
-	float CurrentRadius = radio * sin(((180.0f - (Xdegrees * indexLoop)) * DtoR));
+	float CurrentRadius = radio * sin(((180.0f - (Xdegrees *newHeight* indexLoop)) * DtoR));
 	//Calculo las posiciones de los vertices
 	for (int i = 0; i < numVertices * 3; i += 3)
 	{
 		if (SubdivisionHeight == verticeActual)
 		{
 			indexLoop++;
-			CurrentRadius = radio * sin(((180.0f - (Xdegrees * indexLoop)) * DtoR));
+			CurrentRadius = radio * sin(((180.0f - (Xdegrees * newHeight* indexLoop)) * DtoR));
 			verticeActual = 0;
 		}
 
