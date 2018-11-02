@@ -1058,7 +1058,6 @@ void CFBXPARCIAL1::reset()
 	m_unsignedShortData.clear();
 }
 
-
 void CFBXPARCIAL1::GetFBXData(string filename, string wordTofind, char token, string delimiter, char token2, char token3, string dataType, bool condition)
 {
 	ifstream LoadFBXFile;
@@ -1178,4 +1177,42 @@ void CFBXPARCIAL1::GetFBXData(string filename, string wordTofind, char token, st
 void CFBXPARCIAL1::TGACaller(const char *filename, unsigned int *newTextureID)
 {
 	
+}
+
+typedef int(*ResetDLL) ();
+typedef int(*GetFBXDataDLL) (string, string, char, string, char, char, string, bool);
+typedef int(*loadFBXModelDLL) (const char * const, float , float , float , unsigned short , unsigned short, unsigned short);
+
+void CFBXPARCIAL1::CallDLLFBX()
+{
+	HINSTANCE hDLL = LoadLibrary(L"objectLoaderDLL.dll");
+
+	if (hDLL == NULL)
+	{
+		cout << "Error al cargar la libreria! Quitting!" << endl;
+	}
+	else
+	{
+		ResetDLL Reset = (ResetDLL)GetProcAddress(hDLL, "Reset");
+		GetFBXDataDLL GetFBXData = (GetFBXDataDLL)GetProcAddress(hDLL, "GetFBXData");
+		loadFBXModelDLL loadFBXModel = (loadFBXModelDLL)GetProcAddress(hDLL, "loadFBXModel");
+
+
+		if (loadFBXModel)
+		{
+			float *arrayVertex = nullptr;
+			float *arrayNormals = nullptr;
+			float *arrayUV = nullptr;
+			unsigned short *arrayVertexIndex = nullptr;
+			unsigned short *arrayNormalsIndex = nullptr;
+			unsigned short *arrayUvIndex = nullptr;
+			//loadFBXModel("Test_Cube_Ascii.fbx", &arrayVertex, ); Aqui ocurrio un error jaja no se muy bien que pasa profe
+
+		}
+		//if (Subtract)
+		//	cout << "50-10=" << Subtract(50, 10) << std::endl;
+
+		FreeLibrary(hDLL);
+
+	}
 }

@@ -101,6 +101,8 @@ public:
 	void TGACaller(const char *filename, unsigned int *newTextureID);
 	void reset();
 
+	// Load FBX DLL
+	void CallDLLFBX();
 
 	// CreateGrid
 	void Hexagon();
