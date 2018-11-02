@@ -185,6 +185,9 @@
     <ClInclude Include="Include\CGameMenuItem.h" />
     <ClInclude Include="Include\CGameWindow.h" />
     <ClInclude Include="Include\CGeometricFigure.cpp.h" />
+    <ClInclude Include="Include\CGrid.h" />
+    <ClInclude Include="Include\CGridCell.h" />
+    <ClInclude Include="Include\CGridGame.h" />
     <ClInclude Include="Include\CMaterial.h" />
     <ClInclude Include="Include\COpenGLRenderer.h" />
     <ClInclude Include="Include\COpenGLShaderProgram.h" />
@@ -220,6 +223,9 @@
     <ClCompile Include="Source\CGameMenuItem.cpp" />
     <ClCompile Include="Source\CGameWindow.cpp" />
     <ClCompile Include="Source\CGeometricFigure.cpp" />
+    <ClCompile Include="Source\CGrid.cpp" />
+    <ClCompile Include="Source\CGridCell.cpp" />
+    <ClCompile Include="Source\CGridGame.cpp" />
     <ClCompile Include="Source\COpenGLRenderer.cpp" />
     <ClCompile Include="Source\COpenGLShaderProgram.cpp" />
     <ClCompile Include="Source\CVector3.cpp" />

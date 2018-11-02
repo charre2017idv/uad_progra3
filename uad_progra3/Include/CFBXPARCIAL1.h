@@ -100,6 +100,11 @@ public:
 	void GetFBXData(string filename, string wordTofind, char token, string delimiter, char token2, char token3, string dataType, bool condition);
 	void TGACaller(const char *filename, unsigned int *newTextureID);
 	void reset();
+
+
+	// CreateGrid
+	void Hexagon();
+	int m_numFacesRender;
 public:
 	// ============================== Variables of GetFBXData
 	string m_reader;

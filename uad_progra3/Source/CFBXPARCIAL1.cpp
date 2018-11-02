@@ -101,7 +101,8 @@ void CFBXPARCIAL1::initialize()
 		// Show the figure
 		//createPyramid();
 		//createSphereTrail(6, 6);
-		loadFBXModel("Test_Cube_Ascii.fbx");
+		//loadFBXModel("Test_Cube_Ascii.fbx");
+		Hexagon();
 	}
 
 	// ==================================
@@ -120,7 +121,7 @@ void CFBXPARCIAL1::run()
 			// Set initial clear screen color
 			getOpenGLRenderer()->setClearScreenColor(0.25f, 0.0f, 0.75f);
 			// Set Distance of the camera
-			getOpenGLRenderer()->setCameraDistance(100.0f);
+			getOpenGLRenderer()->setCameraDistance(15.0f);
 			// Initialize window width/height in the renderer
 			getOpenGLRenderer()->setWindowWidth(getGameWindow()->getWidth());
 			getOpenGLRenderer()->setWindowHeight(getGameWindow()->getHeight());
@@ -153,7 +154,7 @@ void CFBXPARCIAL1::update(double deltaTime)
 	// ----------------------------------------------------------------------------------------------------------------------------------------
 	// degrees = rotation speed * delta time 
 	// deltaTime is expressed in milliseconds, but our rotation speed is expressed in seconds (convert delta time from milliseconds to seconds)
-	degreesToRotate = m_rotationSpeed * (deltaTime / 1000.0);
+	//degreesToRotate = m_rotationSpeed * (deltaTime / 1000.0);
 	// accumulate rotation degrees
 	m_objectRotation += degreesToRotate;
 
@@ -183,7 +184,6 @@ void CFBXPARCIAL1::render()
 	else // Otherwise, render app-specific stuff here...
 	{
 		// =================================
-		float color[3] = { 194.0f, 54.0, 22.0f };
 
 		unsigned int noTexture = 0;
 
@@ -191,24 +191,283 @@ void CFBXPARCIAL1::render()
 		double totalDegreesRotatedRadians = m_objectRotation * 3.1459 / 180.0;
 
 		// Get a matrix that has both the object rotation and translation
-		MathHelper::Matrix4 modelMatrix = MathHelper::ModelMatrix(
-			(float)totalDegreesRotatedRadians, m_objectPosition);
 
-		if (m_geoVAOID > 0 && m_numFacesFBX > 0)		// Cambiar por la variable pertinente
+
+
+		//CVector3 pos2 = m_objectPosition;
+		//pos2.X += 1.7f;
+		//MathHelper::Matrix4 modelMatrix2 = MathHelper::ModelMatrix(
+		//	(float)totalDegreesRotatedRadians, pos2);
+
+
+		// ============================== Trail object
+		int Matrix[5][5] =
 		{
-			getOpenGLRenderer()->renderObject(
-				&m_ShaderID,
-				&m_geoVAOID,
-				&noTexture,
-				m_numFacesFBX, // Sustituir por la variable correspondiente
-				color,
-				&modelMatrix,
-				COpenGLRenderer::EPRIMITIVE_MODE::TRIANGLES,
-				false
-			);
+			0,0,0,0,0,
+			0,0,1,0,0,
+			0,1,1,1,0,
+			0,0,1,0,0,
+			0,0,0,0,0
+		};
+
+
+
+		float incrementoX1 = 1.76;
+		float incrementoY = 1.7 - .17;
+		float incrementoX2 = 1.7 / 2;
+		int filas = 4;
+		int columnas = 4;
+		float totalTamanoX = incrementoX1 * columnas;
+		float totalTamanoY = incrementoY * filas;
+		float InicialX = (totalTamanoX / 2) - totalTamanoX;
+		float InicialY = (totalTamanoY / 2) - totalTamanoY;
+		int count = 0;
+
+		float R = 194.0;
+		float G = 54.0;
+		float B = 22.0;
+		
+		//float R = ((float) rand());
+		//float G = 54.0;
+		//float B = 22.0;
+
+
+		float color[3] = { R,G,B };
+		float color2[3] = { 255.0f, 177.0, 44.0f };
+
+		for (float i = InicialY; i < totalTamanoY / 2 - 1; i += incrementoY) // Columnas
+		{
+			for (float j = InicialX; j < totalTamanoX / 2 - 1; j += incrementoX1) // Filas'
+			{
+				if ((count % 2) != 0)
+				{
+					m_objectPosition.Y = i;
+					m_objectPosition.X = j + incrementoX2;
+				}
+				else
+				{
+					m_objectPosition.Y = i;
+					m_objectPosition.X = j;
+
+				}
+				MathHelper::Matrix4 modelMatrix = MathHelper::ModelMatrix(
+					(float)totalDegreesRotatedRadians, m_objectPosition);
+
+
+				if (m_geoVAOID > 0 && m_numFacesRender > 0)		// Cambiar por la variable pertinente
+				{
+					getOpenGLRenderer()->renderObject(
+						&m_ShaderID,
+						&m_geoVAOID,
+						&noTexture,
+						m_numFacesRender, // Sustituir por la variable correspondiente
+						color,
+						&modelMatrix,
+						COpenGLRenderer::EPRIMITIVE_MODE::TRIANGLES,
+						false
+					);
+
+				}
+			}
+			count++;
 		}
-		// =================================
 	}
+}
+
+void CFBXPARCIAL1::Hexagon()
+{
+	bool loaded;
+	m_numFacesRender = 6;
+	int size = 1;
+	float width = sqrt(3) * size;
+	float height = 2 * size;
+	float centerWidth = width / 2;
+	float centerHeight = height / 2;
+
+
+
+	int numAristas = 6;
+	int numVertices = 7;
+	//int numFaces = (12 * 2) + 2;
+	float anguloY = 360 / 6;
+	float Z1 = 0.25;
+	float Z2 = -0.25;
+	float PI = 3.14159245358979323846;
+	// ============================== SECTION
+	float *vdata = new float[numVertices * 3];
+
+	int **Vertex = new int *[3]; // Registro del indice de los vertices
+
+	for (int i = 0; i < 6 + 2; i++)
+	{
+		Vertex[i] = new int[6 + 2];
+	}
+	// Referencia del limite de los vertices
+	for (int i = 0; i < 2 + 1; i++)
+	{
+		for (int j = 0; j < 6 + 2; j++)
+		{
+			Vertex[i][j] = -1;
+		}
+	}
+	// ============================== SECTION
+	float Vertex_X = 0.0f;
+	float Vertex_Y = 0.0f;
+	float Vertex_Z = 0.0f;
+
+	int numVertice = 0;
+	int vertice = 0;
+	int nV = 0;
+	// ============================== Asignando los vertices
+	for (int j = 0; j < 1; j++)
+	{
+		Vertex_X = 0;
+		vdata[nV] = Vertex_X;
+		nV++;
+		Vertex_Y = 0;
+		vdata[nV] = Vertex_Y;
+		nV++;
+		if (j < 1)
+		{
+			Vertex_Z = Z1;
+		}
+
+
+		vdata[nV] = Vertex_Z;
+		nV++;
+
+		Vertex[j][vertice] = numVertice;
+		numVertice++;
+		vertice++;
+		// ============================== Se definen los vertices en su posicion
+		for (int i = 0; i < 360; i += anguloY)
+		{
+			Vertex_X = size * sin(i / (180 / PI));
+			vdata[nV] = Vertex_X;
+			nV++;
+
+			Vertex_Y = size * cos(i / (180 / PI));
+			vdata[nV] = Vertex_Y;
+			nV++;
+
+			if (j < 1)
+			{
+				Vertex_Z = Z1;
+			}
+
+
+			vdata[nV] = Vertex_Z;
+			nV++;
+
+			Vertex[j][vertice] = numVertice;
+			numVertice++;
+			vertice++;
+
+		}
+		vertice = 0;
+	}
+
+	// Vertices = 6;
+	int fila, col;
+	int num = 0;
+	unsigned short vIndices[6 * 3];
+
+	// Se asignana los vertices a su posicion
+	for (int i = 0; i < 6 * 3; i++)
+	{
+		vIndices[i] = 0;
+	}
+
+	for (int i = 0; i < 1; i++)
+	{
+		for (int j = 1; j < 7; j++)
+		{
+			if (i == 0)
+			{
+				if (Vertex[i][j + 1] == -1)
+				{
+					vIndices[num] = unsigned short(Vertex[i][0]);
+					num++;
+					vIndices[num] = unsigned short(Vertex[i][1]);
+					num++;
+					vIndices[num] = unsigned short(Vertex[i][j]);
+					num++;
+				}
+				else
+				{
+					vIndices[num] = unsigned short(Vertex[i][0]);
+					num++;
+					vIndices[num] = unsigned short(Vertex[i][j + 1]);
+					num++;
+					vIndices[num] = unsigned short(Vertex[i][j]);
+					num++;
+				}
+
+			}
+			// Se muestra el lado contrario	
+			else if (i == 1)
+			{
+				/*
+					if (Vertex[i][j + 1] == -1)
+					{
+						vIndices[num] = unsigned short(Vertex[i][0]);
+						num++;
+						vIndices[num] = unsigned short(Vertex[i][j]);
+						num++;
+						vIndices[num] = unsigned short(Vertex[i][1]);
+						num++;
+					}
+					else
+					{
+						vIndices[num] = unsigned short(Vertex[i][0]);
+						num++;
+						vIndices[num] = unsigned short(Vertex[i][j]);
+						num++;
+						vIndices[num] = unsigned short(Vertex[i][j + 1]);
+						num++;
+					}
+				*/
+			}
+		}
+	}
+
+	// Se definen las normales
+	float nData[6 * 3];
+	for (int i = 0; i < 6 * 3; i++)
+	{
+		nData[i] = 0.0;
+	}
+
+	int num1 = 0;
+	unsigned short nIndice[6 * 3];
+	// Se definen los indices de las normales
+	for (int i = 0; i < 6 * 3; i++)
+	{
+		nIndice[i] = num1;
+		i++;
+		nIndice[i] = num1;
+		i++;
+		nIndice[i] = num1;
+		num1++;
+	}
+
+	loaded = getOpenGLRenderer()->allocateGraphicsMemoryForObject(
+		&m_ShaderID,
+		&m_geoVAOID,
+		vdata,			// Vertices
+		7,				// Num Vertices
+		nData,			// normales
+		6,				// num normales
+		vdata,			// UV coords
+		7,				// num UV coords
+		vIndices,		// Indices a vertices
+		6,				// num tri
+		nIndice,		// Indices a normales
+		6,				// num indices a normales
+		vIndices,		// Indices a UV Coords
+		6);				// num indices a UV coords
+	if (!loaded)
+		m_geoVAOID = 0;
 }
 
 /* */

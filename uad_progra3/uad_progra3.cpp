@@ -13,11 +13,13 @@ using namespace std;
 #include  "Include/CFBXPARCIAL1.h"
 //#include "Include/CAppHexGrid.h"
 #include "Include/CAppEmpty.h"
+#include "Include/CGridGame.h"
 
 int main()
 {
 	CApp *app = NULL;                  // Pointer to BASE class CApp
-	app = new CFBXPARCIAL1(800, 600);     // Using pointer to base class, create a new object of DERIVED class
+	//app = new CFBXPARCIAL1(800, 600);     // Using pointer to base class, create a new object of DERIVED class
+	app = new CGridGame(800, 600);     // Using pointer to base class, create a new object of DERIVED class
 	app->run();                        // Run the app
 	delete app;                        // Delete pointer
 	app = NULL;                        // Set pointer to NULL
