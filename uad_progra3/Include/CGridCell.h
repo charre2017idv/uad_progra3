@@ -1,5 +1,6 @@
 #include <math.h>
-
+#ifndef CGridCell_HEADER
+#define CGridCell_HEADER
 class CGridCell
 {
 public:
@@ -49,3 +50,4 @@ public:
 	void Cell();
 };
 
+#endif

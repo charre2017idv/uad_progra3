@@ -174,8 +174,10 @@
     <ClInclude Include="Include\CApp.h" />
     <ClInclude Include="Include\CAppEmpty.h" />
     <ClInclude Include="Include\CAppParcial2.h" />
+    <ClInclude Include="Include\CAppQuadTree.h" />
     <ClInclude Include="Include\CBinaryTree.h" />
     <ClInclude Include="Include\CBinaryTreeNode.h" />
+    <ClInclude Include="Include\CCamera.h" />
     <ClInclude Include="Include\CCircularDoubleLinkedList.h" />
     <ClInclude Include="Include\CCircularDoubleLinkedListNode.h" />
     <ClInclude Include="Include\CColor.h" />
@@ -191,6 +193,8 @@
     <ClInclude Include="Include\CMaterial.h" />
     <ClInclude Include="Include\COpenGLRenderer.h" />
     <ClInclude Include="Include\COpenGLShaderProgram.h" />
+    <ClInclude Include="Include\CQuadTree.h" />
+    <ClInclude Include="Include\CQuadTreeNode.h" />
     <ClInclude Include="Include\CVector3.h" />
     <ClInclude Include="Include\CWideStringHelper.h" />
     <ClInclude Include="Include\Globals.h" />
@@ -215,6 +219,8 @@
     <ClCompile Include="Source\CApp.cpp" />
     <ClCompile Include="Source\CAppEmpty.cpp" />
     <ClCompile Include="Source\CAppParcial2.cpp" />
+    <ClCompile Include="Source\CAppQuadTree.cpp" />
+    <ClCompile Include="Source\CCamera.cpp" />
     <ClCompile Include="Source\CCircularDoubleLinkedList.cpp" />
     <ClCompile Include="Source\CCircularDoubleLinkedListNode.cpp" />
     <ClCompile Include="Source\CFBX2.cpp" />
@@ -228,6 +234,8 @@
     <ClCompile Include="Source\CGridGame.cpp" />
     <ClCompile Include="Source\COpenGLRenderer.cpp" />
     <ClCompile Include="Source\COpenGLShaderProgram.cpp" />
+    <ClCompile Include="Source\CQuadTree.cpp" />
+    <ClCompile Include="Source\CQuadTreeNode.cpp" />
     <ClCompile Include="Source\CVector3.cpp" />
     <ClCompile Include="Source\C_FBX.cpp" />
     <ClCompile Include="Source\LoadShaders.cpp" />

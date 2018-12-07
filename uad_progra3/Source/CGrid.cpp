@@ -63,6 +63,10 @@ void CGrid::initialize()
 		//loadFBXModel("Test_Cube_Ascii.fbx");
 		createSavePosition();
 		m_Cell.Cell();
+
+		/*Allocate the cell in a vector*/
+		//newsavePos.push_back(m_Cell);
+
 		m_Cell.loaded = getOpenGLRenderer()->allocateGraphicsMemoryForObject(
 			&m_Cell.m_ShaderID,
 			&m_Cell.m_geoVAOID,
@@ -82,6 +86,8 @@ void CGrid::initialize()
 	if (!m_Cell.loaded)
 		m_Cell.m_geoVAOID = 0;
 	// ==================================
+	
+
 }
 
 void CGrid::run()
@@ -145,6 +151,16 @@ void CGrid::update(double deltaTime)
 
 void CGrid::render()
 {
+	if (centerPoints.size() > 3)
+	{
+		centerPoints.clear();// Libera la memoria para poder almacenar el siguiente punto sin problemas de almacenar centros infinitos
+
+	}
+	else
+	{
+		
+	}
+	
 	CGameMenu *menu = getMenu();
 
 	// If menu is active, render menu
@@ -174,40 +190,7 @@ void CGrid::render()
 
 
 		// ============================== Trail object
-		int Matrix[5][5] =
-		{
-			0,0,0,0,0,
-			0,0,1,0,0,
-			0,1,1,1,0,
-			0,0,1,0,0,
-			0,0,0,0,0
-		};
-
-
-
-		float incrementoX1 = 1.76;
-		float incrementoY = 1.7 - .17;
-		float incrementoX2 = 1.7 / 2;
-		int filas = 10;
-		int columnas = 10;
-		float totalTamanoX = incrementoX1 * columnas;
-		float totalTamanoY = incrementoY * filas;
-		float InicialX = (totalTamanoX / 2) - totalTamanoX;
-		float InicialY = (totalTamanoY / 2) - totalTamanoY;
-		int count = 0;
-
-		float R = 194.0;
-		float G = 54.0;
-		float B = 22.0;
-
-		//float R = ((float) rand());
-		//float G = 54.0;
-		//float B = 22.0;
-
-
-		float color[3] = { R,G,B };
-		float color2[3] = { 255.0f, 177.0, 44.0f };
-
+	
 		for (float i = InicialY; i < totalTamanoY / 2 - 1; i += incrementoY) // Columnas
 		{
 			for (float j = InicialX; j < totalTamanoX / 2 - 1; j += incrementoX1) // Filas'
@@ -216,6 +199,7 @@ void CGrid::render()
 				{
 					m_objectPosition.Y = i;
 					m_objectPosition.X = j + incrementoX2;
+					
 				}
 				else
 				{
@@ -223,12 +207,33 @@ void CGrid::render()
 					m_objectPosition.X = j;
 
 				}
+
 				MathHelper::Matrix4 modelMatrix = MathHelper::ModelMatrix(
 					(float)totalDegreesRotatedRadians, m_objectPosition);
+				pos2 = m_objectPosition;
+				
+				//while (centerPoints.size() < 3)
+				//{
+				//	if (centerPoints.size() != 3)
+				//	{
+				//		centerPoints.push_back(pos); // Save the current center points
+				//		saveCenterPoints(pos);
+				//
+				//	}
+				//
+				//
+				//}
 
 
-				if (m_Cell.m_geoVAOID > 0 && m_Cell.m_numFacesRender > 0)		// Cambiar por la variable pertinente
+
+					if (m_Cell.m_geoVAOID > 0 && m_Cell.m_numFacesRender > 0)		// Cambiar por la variable pertinente
 				{
+
+					//createSavePosition();
+					//newsavePos.push_back(m_Cell);
+					//pos2 = { m_objectPosition.X,m_objectPosition.Y, m_objectPosition.Z };
+					//savePos.push_back(pos2);
+
 					getOpenGLRenderer()->renderObject(
 						&m_Cell.m_ShaderID,
 						&m_Cell.m_geoVAOID,
@@ -239,20 +244,65 @@ void CGrid::render()
 						COpenGLRenderer::EPRIMITIVE_MODE::TRIANGLES,
 						false
 					);
-
+					
 				}
 			}
 			count++;
+			//pos = { 0,0,0 };
 		}
+	}
+	
+}
+
+// This function will save the center of the cells
+void CGrid::savePostionForNode(vector <CVector3> &Positions)
+{
+	int line = 0;
+	for (float i = InicialY; i < totalTamanoY / 2 - 1; i += incrementoY) // Columnas
+	{
+
+		for (float j = InicialX; j < totalTamanoX / 2 - 1; j += incrementoX1) // Filas'
+		{
+
+			if ((count % 2) != 0)
+			{
+				m_objectPosition.Y = i;
+				m_objectPosition.X = j + incrementoX2;
+
+			}
+			else
+			{
+				m_objectPosition.Y = i;
+				m_objectPosition.X = j;
+
+			}
+			CVector3 PosicionesTemp = m_objectPosition;
+			Positions.push_back(PosicionesTemp);
+		}
+		line++;
 	}
 }
 
-
 void CGrid::createSavePosition()
 {
-	m_cellPosition = new float*[filas*columnas];
-	for (int i = 0; i < filas*columnas; i++)
+	pos = m_objectPosition;
+	centerPoints.push_back(pos); // Save the current center points
+}
+
+void CGrid::saveCenterPoints(CVector3 Positions)
+{
+	fstream file;
+	string namefile = "CenterPoints.txt";
+	file.open(namefile, ios::out);
+	if (file.fail())
 	{
-		m_cellPosition[i] = new float[3];
+		cout << "(!) Error al abrir el archivo" << endl;
+		exit(1);
 	}
+	//for (int i = 0; i < filas; i++)
+	//{
+	//}
+	file << Positions.X << ", " << Positions.Y << ", " << Positions.Z;
+	file << endl;
+	file.close();
 }
